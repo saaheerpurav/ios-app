@@ -26,6 +26,10 @@ jobs:
           EXPO_PUBLIC_VOLUNTEER_NAME: ${{ secrets.EXPO_PUBLIC_VOLUNTEER_NAME }}
         run: |
           set -euo pipefail
+          if [ -f .env ]; then
+            exit 0
+          fi
+
           : "${EXPO_PUBLIC_SUPABASE_URL:?Missing EXPO_PUBLIC_SUPABASE_URL repository secret}"
           : "${EXPO_PUBLIC_SUPABASE_ANON_KEY:?Missing EXPO_PUBLIC_SUPABASE_ANON_KEY repository secret}"
           : "${EXPO_PUBLIC_VOLUNTEER_NAME:=Saaheer}"
