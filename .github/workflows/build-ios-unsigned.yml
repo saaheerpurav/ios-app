@@ -19,6 +19,23 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Configure Expo public env
+        env:
+          EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
+          EXPO_PUBLIC_VOLUNTEER_NAME: ${{ secrets.EXPO_PUBLIC_VOLUNTEER_NAME }}
+        run: |
+          set -euo pipefail
+          : "${EXPO_PUBLIC_SUPABASE_URL:?Missing EXPO_PUBLIC_SUPABASE_URL repository secret}"
+          : "${EXPO_PUBLIC_SUPABASE_ANON_KEY:?Missing EXPO_PUBLIC_SUPABASE_ANON_KEY repository secret}"
+          : "${EXPO_PUBLIC_VOLUNTEER_NAME:=Saaheer}"
+
+          {
+            echo "EXPO_PUBLIC_SUPABASE_URL=$EXPO_PUBLIC_SUPABASE_URL"
+            echo "EXPO_PUBLIC_SUPABASE_ANON_KEY=$EXPO_PUBLIC_SUPABASE_ANON_KEY"
+            echo "EXPO_PUBLIC_VOLUNTEER_NAME=$EXPO_PUBLIC_VOLUNTEER_NAME"
+          } > .env
+
       - run: npm ci
 
       - run: npx expo prebuild --platform ios --clean --non-interactive
